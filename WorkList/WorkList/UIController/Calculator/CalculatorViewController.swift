@@ -11,11 +11,25 @@ import SnapKit
 
 class CalculatorViewController: UIViewController {
 
+    // MARK: - parameters
+    var displayToLabel: Double {
+        get {
+            if let value = Double(lblDisplay.text!) {
+                return value
+            } else {
+                return Double(0)
+            }
+        }
+        set(value) {
+            lblDisplay.text = String(value)
+        }
+    }
+    
     let lblDisplay: UILabel = {
         //label的基本使用 使用大小边框的大小来创建
         let label = UILabel()
         //设置文本的内容
-        label.text = "曲 家意"
+        label.text = "0"//"曲 家意"
         //设置文本的行数
         label.numberOfLines = 1
         //文字过长的时候的显示模式 具体看文档
@@ -33,7 +47,7 @@ class CalculatorViewController: UIViewController {
     
     let lblHistory: UILabel = {
         let label = UILabel()
-        label.text = "test text"
+        label.text = "0"//"test text"
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
         label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -43,7 +57,7 @@ class CalculatorViewController: UIViewController {
         return label
     }()
     
-    let btnNum1 = CalculatorNumButton(text: "1")
+    let btnNum1 = UIButton(type: .roundedRect)//CalculatorNumButton(text: "1")
     let btnNum2 = CalculatorNumButton(text: "2")
     let btnNum3 = CalculatorNumButton(text: "3")
     let btnNum4 = CalculatorNumButton(text: "4")
@@ -63,11 +77,26 @@ class CalculatorViewController: UIViewController {
     let btnplus = CalculatorCalcButton(text: "+")
     let btnEqual = CalculatorCalcButton(text: "=")
     
+    // MARK: - Inherited function
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(red: 248, green: 248, blue: 248, alpha: 1)
+        view.backgroundColor = UIColor.systemGray6
         
+        btnNum1.setTitle("1", for: .normal)
+        btnNum1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
+        // 设置button的内间距为居左10个像素点
+        btnNum1.titleEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        btnNum1.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.center
+        btnNum1.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        btnNum1.backgroundColor = UIColor.systemGray2
+        btnNum1.layer.borderWidth = 0.5
+        btnNum1.layer.borderColor = UIColor.black.cgColor
+        // 设置button的圆角样式
+        btnNum1.layer.masksToBounds = true
+        btnNum1.layer.cornerRadius = 10
+        btnNum1.clipsToBounds = true
+        btnNum1.setTitleColor(UIColor.white, for: .normal)
         //添加到视图中
         view.addSubview(lblHistory)
         view.addSubview(lblDisplay)
@@ -96,117 +125,100 @@ class CalculatorViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        print(view.snp.height)
-        
-        lblHistory.snp.makeConstraints { (make) in
-            //make.top.equalTo(view.snp.height).multipliedBy(0.2)
-            make.top.equalTo(200)
-            make.left.equalTo(0)
-            make.right.equalTo(0)
-            //make.height.equalTo(lblHistory.snp.height)
-        }
-        
-        lblDisplay.snp.makeConstraints { (make) in
-            make.top.equalTo(lblHistory.snp.bottom)
-            make.left.equalTo(lblHistory.snp.left)
-            make.right.equalTo(lblHistory.snp.right)
-            //make.height.equalTo(lblDisplay.snp.height)
-        }
-        
-        btnClear.snp.makeConstraints { (make) in
-            make.top.equalTo(lblDisplay.snp.bottom)
-            make.left.equalTo(lblHistory.snp.left)
+        btnNum0.snp.makeConstraints { (make) in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
             make.height.equalTo(view.snp.height).multipliedBy(0.1)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
+            make.width.equalTo(view.snp.width).multipliedBy(0.5)
         }
         
-        btnToMinus.snp.makeConstraints { (make) in
-            make.top.equalTo(btnClear.snp.top)
-            make.left.equalTo(btnClear.snp.right)
-            make.height.equalTo(view.snp.height).multipliedBy(0.1)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
-        }
-        
-        btnRemd.snp.makeConstraints { (make) in
-            make.top.equalTo(btnToMinus.snp.top)
-            make.left.equalTo(btnToMinus.snp.right)
-            make.height.equalTo(view.snp.height).multipliedBy(0.1)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
-        }
-        
-        btnNum1.snp.makeConstraints { (make) in
-            make.top.equalTo(btnClear.snp.bottom)
-            make.left.equalTo(btnClear.snp.left)
-            make.height.equalTo(view.snp.height).multipliedBy(0.1)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
-        }
-        
-        btnNum2.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum1.snp.top)
-            make.left.equalTo(btnNum1.snp.right)
-            make.height.equalTo(view.snp.height).multipliedBy(0.1)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
-        }
-        
-        btnNum3.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum2.snp.top)
-            make.left.equalTo(btnNum2.snp.right)
-            make.height.equalTo(view.snp.height).multipliedBy(0.1)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
-        }
-        
-        btnNum4.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum1.snp.bottom)
-            make.left.equalTo(btnNum1.snp.left)
-            make.height.equalTo(view.snp.height).multipliedBy(0.1)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
-        }
-        
-        btnNum5.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum2.snp.bottom)
-            make.left.equalTo(btnNum2.snp.left)
-            make.height.equalTo(view.snp.height).multipliedBy(0.1)
-            make.width.equalTo(view.snp.width).multipliedBy(0.25)
-        }
-        
-        btnNum6.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum3.snp.bottom)
-            make.left.equalTo(btnNum3.snp.left)
+        btnPoint.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnNum0.snp.bottom)
+            make.left.equalTo(btnNum0.snp.right)
             make.height.equalTo(view.snp.height).multipliedBy(0.1)
             make.width.equalTo(view.snp.width).multipliedBy(0.25)
         }
         
         btnNum7.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum4.snp.bottom)
+            make.bottom.equalTo(btnNum0.snp.top)
             make.left.equalTo(btnNum4.snp.left)
             make.height.equalTo(view.snp.height).multipliedBy(0.1)
             make.width.equalTo(view.snp.width).multipliedBy(0.25)
         }
         
         btnNum8.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum5.snp.bottom)
-            make.left.equalTo(btnNum5.snp.left)
+            make.bottom.equalTo(btnNum7.snp.bottom)
+            make.left.equalTo(btnNum7.snp.right)
             make.height.equalTo(view.snp.height).multipliedBy(0.1)
             make.width.equalTo(view.snp.width).multipliedBy(0.25)
         }
         
         btnNum9.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum6.snp.bottom)
-            make.left.equalTo(btnNum6.snp.left)
+            make.bottom.equalTo(btnNum8.snp.bottom)
+            make.left.equalTo(btnNum8.snp.right)
             make.height.equalTo(view.snp.height).multipliedBy(0.1)
             make.width.equalTo(view.snp.width).multipliedBy(0.25)
         }
         
-        btnNum0.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum7.snp.bottom)
+        btnNum4.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnNum7.snp.top)
             make.left.equalTo(btnNum7.snp.left)
             make.height.equalTo(view.snp.height).multipliedBy(0.1)
-            make.width.equalTo(view.snp.width).multipliedBy(0.5)
+            make.width.equalTo(view.snp.width).multipliedBy(0.25)
         }
         
-        btnPoint.snp.makeConstraints { (make) in
-            make.top.equalTo(btnNum9.snp.bottom)
-            make.left.equalTo(btnNum9.snp.left)
+        btnNum5.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnNum4.snp.bottom)
+            make.left.equalTo(btnNum4.snp.right)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
+            make.width.equalTo(view.snp.width).multipliedBy(0.25)
+        }
+        
+        btnNum6.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnNum5.snp.bottom)
+            make.left.equalTo(btnNum5.snp.right)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
+            make.width.equalTo(view.snp.width).multipliedBy(0.25)
+        }
+        
+        btnNum1.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnNum4.snp.top)
+            make.left.equalTo(btnNum4.snp.left)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
+            make.width.equalTo(view.snp.width).multipliedBy(0.25)
+        }
+        
+        btnNum2.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnNum1.snp.bottom)
+            make.left.equalTo(btnNum1.snp.right)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
+            make.width.equalTo(view.snp.width).multipliedBy(0.25)
+        }
+        
+        btnNum3.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnNum2.snp.bottom)
+            make.left.equalTo(btnNum2.snp.right)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
+            make.width.equalTo(view.snp.width).multipliedBy(0.25)
+        }
+        
+        btnClear.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnNum1.snp.top)
+            make.left.equalTo(btnNum1.snp.left)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
+            make.width.equalTo(view.snp.width).multipliedBy(0.25)
+        }
+        
+        btnToMinus.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnClear.snp.bottom)
+            make.left.equalTo(btnClear.snp.right)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
+            make.width.equalTo(view.snp.width).multipliedBy(0.25)
+        }
+        
+        btnRemd.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnToMinus.snp.bottom)
+            make.left.equalTo(btnToMinus.snp.right)
             make.height.equalTo(view.snp.height).multipliedBy(0.1)
             make.width.equalTo(view.snp.width).multipliedBy(0.25)
         }
@@ -245,6 +257,23 @@ class CalculatorViewController: UIViewController {
             make.height.equalTo(view.snp.height).multipliedBy(0.1)
             make.width.equalTo(view.snp.width).multipliedBy(0.25)
         }
+        
+        lblDisplay.snp.makeConstraints { (make) in
+            make.bottom.equalTo(btnClear.snp.top)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
+            //make.height.equalTo(lblDisplay.snp.height)
+        }
+        
+        lblHistory.snp.makeConstraints { (make) in
+            make.bottom.equalTo(lblDisplay.snp.top)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
+            //make.height.equalTo(lblHistory.snp.height)
+        }
     }
+    
+    // MARK: - Custom function
+    
 }
 

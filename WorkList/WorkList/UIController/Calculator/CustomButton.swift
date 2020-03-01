@@ -27,9 +27,14 @@ class CalculatorNumButton: UIButton {
 
 class CalculatorCtlButton: UIButton {
     
+//    let textButton: UIButton!
+    
     init(text: String) {
-        super.init(frame: CGRect.zero)
         
+//        textButton = UIButton(type: .roundedRect)
+        
+        super.init(frame: CGRect.zero)
+
         self.setTitle(text, for: .normal)
         self.backgroundColor = UIColor.systemGray
         self.layer.borderWidth = 0.5
